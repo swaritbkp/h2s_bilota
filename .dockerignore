@@ -1,0 +1,14 @@
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.venv
+dist
+build
+eval/history
+promptwars-elite-pack-v2.1.zip

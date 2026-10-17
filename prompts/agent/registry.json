@@ -1,0 +1,11 @@
+{
+  "active": "v1",
+  "agentVersion": "1.0.0",
+  "versions": {
+    "v1": {
+      "file": "system.v1.md",
+      "note": "Initial prompt",
+      "measuredPassRate": null
+    }
+  }
+}
