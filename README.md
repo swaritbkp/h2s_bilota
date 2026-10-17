@@ -12,6 +12,7 @@
 - **Live Health Check**: [https://saathi-628506547347.asia-south1.run.app/health](https://saathi-628506547347.asia-south1.run.app/health)
 - **Demo Video Script & Instructions**: [`docs/DEMO-VIDEO.md`](docs/DEMO-VIDEO.md)
 - **Efficiency Benchmarks**: [`docs/EFFICIENCY.md`](docs/EFFICIENCY.md)
+- **Accessibility Compliance**: [`docs/ACCESSIBILITY.md`](docs/ACCESSIBILITY.md)
 
 ---
 
@@ -127,19 +128,22 @@ Name                     Stmts   Miss  Cover   Missing
 src\agent\__init__.py        0      0   100%
 src\agent\agent.py         231      8    97%
 src\agent\tools.py          40      0   100%
-src\app.py                  34      4    88%
+src\app.py                  72      1    99%
 src\cli.py                  17      1    94%
 src\core\engine.py          77      0   100%
 src\core\guardrails.py      53      0   100%
 ------------------------------------------------------
-TOTAL                      452     13    97%
+TOTAL                      490     10    98%
 ```
-**Total Statement Coverage: 97%** (>95% requirement satisfied).
+**Total Statement Coverage: 98%** (33/33 tests passing). Comprehensive suites:
+- `tests/test_accessibility.py`: HTML structure, landmarks, skip-link, labels, live regions, WCAG AA/AAA.
+- `tests/test_app_routes.py`: FastAPI routes, Pydantic validation, error branches, security headers.
+- `tests/test_saathi_comprehensive.py`: Core guardrails, tools, agent orchestration, engine contracts.
 
 ### 3. Performance & Memory Benchmarks (`docs/EFFICIENCY.md`)
 - **P50 Latency (Cache Hit):** 0.43 ms
 - **P95 Latency (Cache Hit):** 0.68 ms
-- **Offline Fallback Latency:** 149 ms
+- **Offline Fallback Latency:** 120 ms
 - **Memory Footprint (Baseline):** 20.92 MB
 - **Memory Footprint (Peak):** 106.30 MB (< 120 MB ceiling)
 
