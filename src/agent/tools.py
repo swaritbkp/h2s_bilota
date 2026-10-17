@@ -218,10 +218,44 @@ def draft_dispute_notice_tool(
         f"Status: Formally Lodged via Saathi Statutory Copilot"
     )
 
+    formal_notice_hi = (
+        f"औपचारिक विवाद एवं पारिश्रमिक सुधार नोटिस\n"
+        f"दिनांक: 17 अक्टूबर 2026\n"
+        f"सेवा में: शिकायत निवारण अधिकारी एवं पार्टनर ऑपरेशंस, {plat}\n"
+        f"क्षेत्राधिकार: {c_city}\n\n"
+        f"शिकायतकर्ता: {w_name} (पंजीकृत डिलीवरी/ट्रांसपोर्ट पार्टनर)\n"
+        f"विषय: अनाधिकृत कटौती ₹{ded_amt:.2f} के विरुद्ध औपचारिक विवाद — तत्काल वॉलेट क्रेडिट की मांग\n\n"
+        f"महोदय/महोदया,\n\n"
+        f"मैं अपनी हालिया कार्य शिफ्ट ({hrs:.1f} घंटे) के संबंध में यह औपचारिक वैधानिक शिकायत प्रस्तुत कर रहा हूँ। "
+        f"मेरे शिफ्ट भुगतान से बिना किसी पूर्व सूचना अथवा मदवार सत्यापन के ₹{ded_amt:.2f} की दंडात्मक कटौती की गई है।\n\n"
+        f"अपील के वास्तविक आधार:\n"
+        f"1. परिचालन संदर्भ: {issue_narrative}\n"
+        f"2. वैधानिक अनुपालन: सामाजिक सुरक्षा संहिता (2020) की धारा 112-114 एवं राज्य गिग वर्कर कल्याण विनियमों "
+        f"के अंतर्गत निष्पक्ष सुनवाई के बिना मनमानी कटौती गैर-कानूनी परिचालन प्रक्रिया है।\n"
+        f"3. कर्तव्यनिष्ठा: प्रतिकूल परिस्थितियों में भी मैंने सक्रिय रूप से सेवा प्रदान की।\n\n"
+        f"मांगी गई राहत:\n"
+        f"- ₹{ded_amt:.2f} की राशि 48 घंटे के भीतर मेरे पार्टनर अर्निंग्स वॉलेट में पुनः जमा की जाए।\n"
+        f"- पार्टनर विश्वसनीयता और रेटिंग स्कोर सुरक्षित रखा जाए।\n"
+        f"- कटौती का लिखित तकनीकी विवरण प्रदान किया जाए।\n\n"
+        f"सादर,\n"
+        f"{w_name}\n"
+        f"पार्टनर — {plat} ({c_city})\n"
+        f"स्थिति: साथी (Saathi) वैधानिक कॉपायलट द्वारा सत्यापित"
+    )
+
+    formal_notice_bilingual = (
+        f"--- ENGLISH VERSION ---\n\n{formal_notice}\n\n"
+        f"====================================================\n\n"
+        f"--- हिन्दी अनुवाद (HINDI VERSION) ---\n\n{formal_notice_hi}"
+    )
+
     return {
         "subject": f"FORMAL DISPUTE: Unauthorized Deduction of ₹{ded_amt:.2f} — {w_name}",
         "recipient": f"{plat} Partner Grievance Cell & Compliance Team",
         "formal_notice_body": formal_notice,
+        "notice_en": formal_notice,
+        "notice_hi": formal_notice_hi,
+        "notice_bilingual": formal_notice_bilingual,
         "legal_statutory_citations": [
             "Code on Social Security, 2020 (Sections 112-114: Platform & Gig Worker Welfare)",
             "Karnataka Platform-Based Gig Workers (Social Security & Welfare) Bill",

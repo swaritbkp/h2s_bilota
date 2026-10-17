@@ -44,7 +44,7 @@ Saathi is an AI-powered copilot designed for India's 15+ million gig delivery pa
 
 ### Field 5: Clearly Mention Which Gen AI Services Were Used and Where
 ```
-Google Gemini (gemini-3.8-flash) called in src/agent/agent.py:call_gemini_reasoning via the Google GenAI SDK for dynamic multilingual shift extraction, civic welfare reasoning (e-Shram / PM-JAY / State Gig Boards), and legal grievance drafting. Supported by deterministic mathematical tools in src/agent/tools.py and automatic zero-crash offline benchmark fallback. Full register maintained in docs/GENAI-SERVICES.md and README.md.
+Google Gemini (gemini-2.5-flash / gemini-2.0-flash / gemini-3.8-flash cascade) called in src/agent/agent.py:call_gemini_reasoning via the Google GenAI SDK for dynamic multilingual shift extraction, civic welfare reasoning (e-Shram / PM-JAY / State Gig Boards), and legal grievance drafting. Supported by deterministic mathematical tools in src/agent/tools.py and automatic sub-50ms hybrid engine fallback. Full register maintained in docs/GENAI-SERVICES.md and README.md.
 ```
 - **Status**: **DONE** (Reconciled with code calls, `GENAI-SERVICE:` tags, and `docs/GENAI-SERVICES.md`)
 

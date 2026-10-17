@@ -11,11 +11,14 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy source code and governance assets
+# Copy source code, templates, static assets and governance assets
 COPY src/ ./src/
 COPY docs/ ./docs/
 COPY domain-packs/ ./domain-packs/
 COPY prompts/ ./prompts/
+COPY templates/ ./templates/
+COPY static/ ./static/
+COPY index.html ./index.html
 
 # Expose default HTTP port
 EXPOSE 8080

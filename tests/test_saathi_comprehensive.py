@@ -473,3 +473,72 @@ def test_api_endpoints():
     bad_resp = client.post("/api/analyze", content="not json", headers={"Content-Type": "application/json"})
     assert bad_resp.status_code == 200
     assert bad_resp.json()["status"] in ("INVALID_INPUT", "GUARDRAIL_BLOCKED")
+
+
+def test_all_worker_presets_and_edge_cases():
+    """Verify parsing and full pipeline execution across all presets and edge cases."""
+    from src.agent.agent import parse_worker_input, run_saathi_agent, call_gemini_reasoning
+
+    # 1. Rajesh (Uber / Ola)
+    p_rajesh = parse_worker_input("Cab partner Rajesh driving Uber in Delhi for 14 hours. Gross 2400, fuel 1100, commission 650.")
+    assert p_rajesh["name"] == "Rajesh Singh"
+    assert p_rajesh["platform"] == "Uber / Ola"
+    assert p_rajesh["city"] == "Delhi"
+    assert p_rajesh["hours"] == 14.0
+
+    # 2. Priya (Blinkit / Zepto)
+    p_priya = parse_worker_input("Blinkit dark store partner Priya in Mumbai 10 hours gross 900 net 580 kata 320.")
+    assert p_priya["name"] == "Priya Sharma"
+    assert p_priya["platform"] == "Blinkit / Zepto"
+    assert p_priya["city"] == "Mumbai"
+    assert p_priya["hours"] == 10.0
+
+    # 3. Sunita (Urban Company kit debit & ID block)
+    p_sunita = parse_worker_input("Urban company salon partner Sunita in Chandigarh 8 hours gross 2200 net 1000 kit 1200 id block.")
+    assert p_sunita["name"] == "Sunita Devi"
+    assert p_sunita["platform"] == "Urban Company"
+    assert p_sunita["city"] == "Chandigarh"
+    assert p_sunita["deduction"] == 1200.0
+    assert "Partner Kit" in p_sunita["deduction_reason"]
+
+    # 4. Vikram (Porter logistics waiting detention)
+    p_vikram = parse_worker_input("Porter logistics truck driver Vikram in Pune 11 hours gross 1850 net 1000 waiting 850.")
+    assert p_vikram["name"] == "Vikram Malhotra"
+    assert p_vikram["platform"] == "Porter Logistics"
+    assert p_vikram["city"] == "Pune"
+    assert p_vikram["deduction"] == 850.0
+    assert "Waiting" in p_vikram["deduction_reason"]
+
+    # 5. Mahesh (Construction daily wage injury)
+    p_mahesh = parse_worker_input("Daily wage construction helper Mahesh in Jaipur 10 hours 500/day slip hospital brick.")
+    assert p_mahesh["name"] == "Mahesh Patel"
+    assert p_mahesh["city"] == "Jaipur"
+    assert p_mahesh["is_injury"] is True
+
+    # 6. Tamil Murugan & Kolkata
+    p_murugan = parse_worker_input("Murugan in Chennai 12 hours gross 1200 net 750 kata 450.")
+    assert p_murugan["name"] == "Murugan"
+    assert p_murugan["city"] == "Chennai"
+
+    p_kolkata = parse_worker_input("Kolkata daily wage helper 10 hours Rs 600/day net 600.")
+    assert p_kolkata["city"] == "Kolkata"
+
+    # 7. Net > Gross inversion resilience
+    p_invert = parse_worker_input("Partner gross 800 net 1200.")
+    assert p_invert["gross"] == 1200.0
+    assert p_invert["net"] == 800.0
+
+    # 8. Run pipeline for Sunita & Vikram
+    res_sunita = run_saathi_agent("Sunita Urban company Chandigarh gross 2200 net 1000 kit 1200", force_offline=True)
+    assert res_sunita["status"] == "OK"
+    assert res_sunita["output"]["worker_profile"]["name"] == "Sunita Devi"
+    assert res_sunita["output"]["earnings_audit"]["amount_owed_back"] == 1200.0
+
+    # 9. Call Gemini with simulated exception to test safe fallback
+    with patch("google.genai.Client") as mock_client:
+        mock_instance = MagicMock()
+        mock_instance.models.generate_content.side_effect = RuntimeError("API key quota exhausted")
+        mock_client.return_value = mock_instance
+        res_fail = call_gemini_reasoning("test query", p_sunita, "mock-api-key")
+        assert res_fail is None
+
