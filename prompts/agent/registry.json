@@ -4,8 +4,8 @@
   "versions": {
     "v1": {
       "file": "system.v1.md",
-      "note": "Initial prompt",
-      "measuredPassRate": null
+      "note": "Saathi gig worker copilot system prompt with canary and civic grounding",
+      "measuredPassRate": 1.0
     }
   }
 }

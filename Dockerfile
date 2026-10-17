@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY src/ ./src/
 COPY docs/ ./docs/
 COPY domain-packs/ ./domain-packs/
+COPY prompts/ ./prompts/
 
 # Expose default HTTP port
 EXPOSE 8080
