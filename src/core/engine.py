@@ -1,5 +1,8 @@
+import datetime
+import json
 import os
 import time
+from pathlib import Path
 from typing import Any, Dict
 
 from src.agent.agent import AGENT_VERSION, PROMPT_VERSION, run_saathi_agent
@@ -22,6 +25,36 @@ DEFAULT_PRESET_SCENARIO = {
     "highlight": "₹450 unauthorized deduction (37.5% penalty) | ₹2,00,000 e-Shram accidental insurance gap",
 }
 
+# In-memory deterministic cache
+_RESPONSE_CACHE: Dict[str, Dict[str, Any]] = {}
+AUDIT_LOG_FILE = Path("logs/audit.jsonl")
+
+
+def _log_audit_entry(result: Dict[str, Any]) -> None:
+    """Append-only audit logging for AI governance and compliance."""
+    try:
+        AUDIT_LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+        tele = result.get("telemetry", {})
+        grounding = tele.get("groundingConfidence", 0.0)
+        status = result.get("status", "UNKNOWN")
+        needs_review = status != "OK" or grounding < 0.75
+
+        record = {
+            "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "status": status,
+            "durationMs": tele.get("durationMs", 0),
+            "groundingConfidence": grounding,
+            "fallbackUsed": tele.get("fallbackUsed", False),
+            "layers": tele.get("layers", {}),
+            "promptVersion": tele.get("promptVersion", PROMPT_VERSION),
+            "agentVersion": tele.get("agentVersion", AGENT_VERSION),
+            "humanReviewNeeded": needs_review,
+        }
+        with open(AUDIT_LOG_FILE, "a", encoding="utf-8") as f:
+            f.write(json.dumps(record) + "\n")
+    except Exception:
+        pass
+
 
 def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
     """
@@ -32,7 +65,7 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
 
     if not isinstance(payload, dict):
         duration_ms = int((time.perf_counter() - start_time) * 1000)
-        return {
+        res = {
             "status": "INVALID_INPUT",
             "output": {},
             "citations": [],
@@ -48,6 +81,8 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
                 "layers": {"L1": "BLOCKED", "L2": "L2_SKIPPED", "L3": "PASS"},
             },
         }
+        _log_audit_entry(res)
+        return res
 
     # Extract input text
     is_preset = bool(payload.get("isPreset", False))
@@ -67,7 +102,7 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
     l1_pass, l1_reason, sanitized = validate_input_l1(text)
     if not l1_pass:
         duration_ms = int((time.perf_counter() - start_time) * 1000)
-        return {
+        res = {
             "status": "GUARDRAIL_BLOCKED",
             "output": {},
             "citations": [],
@@ -83,12 +118,14 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
                 "layers": {"L1": "BLOCKED", "L2": "L2_SKIPPED", "L3": "PASS"},
             },
         }
+        _log_audit_entry(res)
+        return res
 
     # Domain Locking Check
     in_scope, scope_reason = check_domain_scope(sanitized)
     if not in_scope and not is_preset:
         duration_ms = int((time.perf_counter() - start_time) * 1000)
-        return {
+        res = {
             "status": "OUT_OF_SCOPE",
             "output": {},
             "citations": [],
@@ -104,11 +141,13 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
                 "layers": {"L1": "PASS", "L2": "L2_SKIPPED", "L3": "PASS"},
             },
         }
+        _log_audit_entry(res)
+        return res
 
     # Empty text check if not preset
     if not text.strip() and not is_preset:
         duration_ms = int((time.perf_counter() - start_time) * 1000)
-        return {
+        res = {
             "status": "INVALID_INPUT",
             "output": {},
             "citations": [],
@@ -124,6 +163,18 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
                 "layers": {"L1": "PASS", "L2": "PASS", "L3": "PASS"},
             },
         }
+        _log_audit_entry(res)
+        return res
+
+    # Check deterministic cache for identical queries
+    cache_key = f"{sanitized}_{is_preset}_{force_offline}"
+    if cache_key in _RESPONSE_CACHE:
+        cached_res = dict(_RESPONSE_CACHE[cache_key])
+        duration_ms = int((time.perf_counter() - start_time) * 1000)
+        cached_res["telemetry"] = dict(cached_res["telemetry"])
+        cached_res["telemetry"]["durationMs"] = duration_ms
+        _log_audit_entry(cached_res)
+        return cached_res
 
     try:
         # Run Saathi agent across the 4-pillar pipeline
@@ -134,10 +185,13 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
         )
         if is_preset:
             result["output"]["preset_info"] = DEFAULT_PRESET_SCENARIO
+
+        _RESPONSE_CACHE[cache_key] = result
+        _log_audit_entry(result)
         return result
     except Exception as exc:
         duration_ms = int((time.perf_counter() - start_time) * 1000)
-        return {
+        res = {
             "status": "ERROR",
             "output": {},
             "citations": [],
@@ -153,3 +207,5 @@ def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
                 "layers": {"L1": "PASS", "L2": "L2_SKIPPED", "L3": "ERROR"},
             },
         }
+        _log_audit_entry(res)
+        return res
