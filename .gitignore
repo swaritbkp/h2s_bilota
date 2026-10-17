@@ -15,3 +15,5 @@ logs/
 .coverage
 .pytest_cache/
 demo_output/
+demo_video/*.webm
+demo_video/*.mp4
