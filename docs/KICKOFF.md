@@ -6,10 +6,10 @@ All six official Hack2skill x Google for Developers submission requirements outr
 
 - [x] **1. GitHub repository link submitted on platform**: `https://github.com/swaritbkp/h2s_bilota`
 - [x] **2. Repository is published and set to PUBLIC access**: Confirmed public access on GitHub
-- [ ] **3. Deployed Project link submitted on platform**: Target live public URL by 30% of build time (12:12 PM)
-- [ ] **4. Brief description of the project built (~120-150 words)**: Drafted below; locked in `docs/SUBMISSION.md`
-- [ ] **5. Clearly mention which Gen AI services were used and where**: Continuous logging in `docs/GENAI-SERVICES.md`
-- [ ] **6. Project demo video link for evaluators to review**: Public/unlisted screen recording by 85% of build time (01:01 PM)
+- [x] **3. Deployed Project link submitted on platform**: Verified live on Google Cloud Run at `https://saathi-628506547347.asia-south1.run.app/`
+- [x] **4. Brief description of the project built (~120-150 words)**: Locked in `docs/SUBMISSION.md` (133 words)
+- [x] **5. Clearly mention which Gen AI services were used and where**: Verified and logged in `docs/GENAI-SERVICES.md` & `README.md`
+- [ ] **6. Project demo video link for evaluators to review**: Script locked in `docs/DEMO-VIDEO.md` (ready to record/paste)
 
 ### Mandated Tech & Hard Constraints
 - **Mandated Technology**: Google ADK + Google Gemini (Flash / Pro)

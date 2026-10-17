@@ -22,17 +22,15 @@ CONFIRMED PUBLIC
 
 ### Field 3: Deployed Project Link
 ```
-http://localhost:8080 (Local Verified) | https://saathi-copilot-asia-south1.run.app (Cloud Run Deploy Target)
+https://saathi-628506547347.asia-south1.run.app/
 ```
-- **Status**: **READY / LIVE**
-- **Cloud Run Deployment Command**:
-  ```bash
-  gcloud run deploy saathi --source . --region asia-south1 --port 8080 --allow-unauthenticated
-  ```
+- **Status**: **DONE (VERIFIED LIVE ON GOOGLE CLOUD RUN)**
 - **Verification Evidence**:
+  - `GET /` returns HTTP 200 in incognito browser without authentication
   - `GET /health` returns HTTP 200 (`{"status": "healthy", "service": "saathi-gig-copilot", "version": "1.0.0"}`)
-  - Zero API keys exposed in browser client (server-side only)
-  - Pinned Judge Control Bar loads and runs "Ramesh" preset in both live Gemini mode and offline fallback mode
+  - `POST /api/analyze` verified live on Cloud Run with both preset and custom driver shift text
+  - Pinned Judge Control Bar and Layer 1 injection defense verified live (`GUARDRAIL_BLOCKED`)
+  - Server-side only key execution with zero keys exposed in frontend bundle
 
 ---
 
@@ -67,7 +65,7 @@ https://youtu.be/PLACEHOLDER_DEMO_VIDEO
 |---|---|---|---|
 | **1. GitHub Repo** | Public git repository link | **DONE** | `https://github.com/swaritbkp/h2s_bilota` |
 | **2. Public Access** | Accessible without login | **DONE** | HTTP 200 confirmed via curl/urllib |
-| **3. Deployed URL** | Public live web app link | **READY / LIVE** | Containerized, health check 200, offline-safe |
+| **3. Deployed URL** | Public live web app link | **DONE** | Verified live at `https://saathi-628506547347.asia-south1.run.app/` |
 | **4. Description** | ~120-150 words | **DONE** | 133 words locked in Field 4 above |
 | **5. Gen AI Register** | Explicit models & call sites | **DONE** | Gemini 3.8 Flash in `src/agent/agent.py` |
 | **6. Demo Video** | 60-120s video link | **READY TO RECORD** | Script locked in `docs/DEMO-VIDEO.md` |

@@ -8,9 +8,9 @@
 
 ## ⚡ Live Links & Resources
 - **Public GitHub Repository**: [https://github.com/swaritbkp/h2s_bilota](https://github.com/swaritbkp/h2s_bilota)
-- **Deployed Project Link**: *(Deploying at 30% milestone checkpoint)*
+- **Deployed Project Link**: [https://saathi-628506547347.asia-south1.run.app/](https://saathi-628506547347.asia-south1.run.app/)
+- **Live Health Check**: [https://saathi-628506547347.asia-south1.run.app/health](https://saathi-628506547347.asia-south1.run.app/health)
 - **Demo Video**: *(Recording at 85% milestone checkpoint)*
-- **Health Check Endpoint**: `GET /health`
 
 ---
 
