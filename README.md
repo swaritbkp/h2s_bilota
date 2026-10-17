@@ -48,7 +48,7 @@ Strictly compliant with Official Submission Requirement 5:
 
 | Service / Model | Call Site / File | Purpose | Where User Sees It | Live or Fallback |
 | :--- | :--- | :--- | :--- | :--- |
-| **Google Gemini (`gemini-2.5-flash`)** | [`src/agent/agent.py:call_gemini_reasoning`](file:///c:/Users/S/OneDrive/Desktop/WarmupSesson/src/agent/agent.py) | Multilingual vernacular shift extraction, statutory welfare reasoning (e-Shram, PM-JAY), and legal grievance drafting | Main 4-Pillar Copilot Dashboard, Anomaly Alert Card, Grievance Letter, and Live Telemetry Drawer | Live Google GenAI API with automatic 2500ms timeout fallback to verified civic benchmark models |
+| **Google Gemini (`gemini-3.8-flash`)** | [`src/agent/agent.py:call_gemini_reasoning`](file:///c:/Users/S/OneDrive/Desktop/WarmupSesson/src/agent/agent.py) | Dynamic vernacular shift extraction, civic welfare reasoning (e-Shram, PM-JAY), and legal grievance drafting | Main 4-Pillar Copilot Dashboard, Anomaly Alert Card, Grievance Letter, and Live Telemetry Drawer | Live Google GenAI API with automatic timeout fallback to verified civic benchmark models |
 
 ---
 

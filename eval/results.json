@@ -1,6 +1,6 @@
 {
   "summary": {
-    "timestamp": "2026-10-17 12:12:07",
+    "timestamp": "2026-10-17 12:36:56",
     "mode": "cmd",
     "target": "python src/cli.py",
     "executed": 8,
@@ -8,8 +8,8 @@
     "failed": 0,
     "skipped": 0,
     "passRate": 1.0,
-    "avgLatencyMs": 141.8,
-    "maxLatencyMs": 159,
+    "avgLatencyMs": 1401.9,
+    "maxLatencyMs": 10161,
     "avgGrounding": 0.25
   },
   "cases": [
@@ -20,8 +20,8 @@
       "status": "OK",
       "schema": true,
       "grounding": 1.0,
-      "latencyMs": 159,
-      "fallbackUsed": true,
+      "latencyMs": 10161,
+      "fallbackUsed": false,
       "detail": ""
     },
     {
@@ -31,7 +31,7 @@
       "status": "OK",
       "schema": true,
       "grounding": 1.0,
-      "latencyMs": 144,
+      "latencyMs": 149,
       "fallbackUsed": true,
       "detail": ""
     },
@@ -42,7 +42,7 @@
       "status": "GUARDRAIL_BLOCKED",
       "schema": true,
       "grounding": 0.0,
-      "latencyMs": 138,
+      "latencyMs": 152,
       "fallbackUsed": false,
       "detail": ""
     },
@@ -53,7 +53,7 @@
       "status": "GUARDRAIL_BLOCKED",
       "schema": true,
       "grounding": 0.0,
-      "latencyMs": 133,
+      "latencyMs": 158,
       "fallbackUsed": false,
       "detail": ""
     },
@@ -64,7 +64,7 @@
       "status": "GUARDRAIL_BLOCKED",
       "schema": true,
       "grounding": 0.0,
-      "latencyMs": 133,
+      "latencyMs": 144,
       "fallbackUsed": false,
       "detail": ""
     },
@@ -75,7 +75,7 @@
       "status": "GUARDRAIL_BLOCKED",
       "schema": true,
       "grounding": 0.0,
-      "latencyMs": 155,
+      "latencyMs": 140,
       "fallbackUsed": false,
       "detail": ""
     },
@@ -86,7 +86,7 @@
       "status": "OUT_OF_SCOPE",
       "schema": true,
       "grounding": 0.0,
-      "latencyMs": 135,
+      "latencyMs": 162,
       "fallbackUsed": false,
       "detail": ""
     },
@@ -97,7 +97,7 @@
       "status": "INVALID_INPUT",
       "schema": true,
       "grounding": 0.0,
-      "latencyMs": 137,
+      "latencyMs": 149,
       "fallbackUsed": false,
       "detail": ""
     }

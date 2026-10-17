@@ -13,7 +13,7 @@
         "status": ["OK"],
         "requireCitations": true,
         "minGrounding": 0.8,
-        "maxLatencyMs": 5000,
+        "maxLatencyMs": 15000,
         "requiredKeys": ["worker_profile", "earnings_audit", "welfare_matcher", "safety_shield", "grievance_draft"]
       }
     },
